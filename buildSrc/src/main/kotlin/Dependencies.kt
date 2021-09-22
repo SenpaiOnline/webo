@@ -1,15 +1,20 @@
-const val KOTLIN_VERSION = "1.3.72"
-const val KTOR = "1.3.2"
-const val KOIN = "2.1.5"
+const val KOTLIN_VERSION = "1.4.10"
+const val KTOR = "1.4.0"
+const val KOIN = "2.1.6"
 
 object Plugins {
     object Versions {
         const val nodeGradle = "2.2.3"
         const val benManesVersions = "0.28.0"
+        const val kotest = "0.2.6"
+        const val openapiGenerator = "5.0.0-beta2"
     }
 
     const val nodeGradle = "com.github.node-gradle.node"
     const val benManesVersions = "com.github.ben-manes.versions"
+    const val koinGradle = "koin-gradle-plugin"
+    const val kotest = "io.kotest"
+    const val openapiGenerator = "openapi.generator"
 }
 
 object Libraries {
@@ -22,8 +27,12 @@ object Libraries {
         const val hikariCP = "3.4.2"
         const val postgres = "42.2.12"
         const val exposed = "0.23.1"
-        const val kmongo = "4.0.2"
+        const val kmongo = "4.1.1"
         const val kotlinxSerialization = "0.20.0"
+        const val arrow = "0.11.0"
+        const val kalidation = "1.5.0"
+        const val valiktor = "0.12.0"
+        const val konform = "0.2.0"
     }
 
     const val ktorServerCore = "io.ktor:ktor-server-core:$KTOR"
@@ -58,16 +67,38 @@ object Libraries {
     const val koinKtor = "org.koin:koin-ktor:$KOIN"
     const val koinSlf4j = "org.koin:koin-logger-slf4j:$KOIN"
     const val kmongoCoroutine = "org.litote.kmongo:kmongo-coroutine:${Versions.kmongo}"
-    const val kotlinxSerialization = "org.jetbrains.kotlinx:kotlinx-serialization-runtime:${Versions.kotlinxSerialization}"
+    const val arrowFx = "io.arrow-kt:arrow-fx:${Versions.arrow}"
+    const val arrowFxCoroutines = "io.arrow-kt:arrow-fx-coroutines:${Versions.arrow}"
+    const val arrowSyntax = "io.arrow-kt:arrow-syntax:${Versions.arrow}"
+    const val kalidation = "com.capraro:kalidation:${Versions.kalidation}"
+    const val valiktor = "org.valiktor:valiktor-core:${Versions.valiktor}"
+    const val konform = "io.konform:konform-jvm:${Versions.konform}"
 }
 
 object TestLibraries {
     private object Versions {
-        const val testcontainers = "1.14.0"
+        const val testcontainers = "1.14.3"
+        const val mockk = "1.10.0"
+        const val strikt = "0.27.0"
+        const val junit = "5.6.2"
+        const val kotlinxCoroutines = "1.3.9"
+        const val kotest = "4.2.5"
     }
 
     const val ktorServerTests = "io.ktor:ktor-server-tests:$KTOR"
     const val koinTest = "org.koin:koin-test:$KOIN"
     const val testContainersJupiter = "org.testcontainers:junit-jupiter:${Versions.testcontainers}"
     const val testContainersNginx = "org.testcontainers:nginx:${Versions.testcontainers}"
+    const val testContainersMongodb = "org.testcontainers:mongodb:${Versions.testcontainers}"
+    const val testContainersToxiproxy = "org.testcontainers:toxiproxy:${Versions.testcontainers}"
+    const val mockk = "io.mockk:mockk:${Versions.mockk}"
+    const val striktJackson = "io.strikt:strikt-jackson:${Versions.strikt}"
+    const val striktArrow = "io.strikt:strikt-arrow:${Versions.strikt}"
+    const val striktMockk = "io.strikt:strikt-mockk:${Versions.strikt}"
+    const val junitJupiter = "org.junit.jupiter:junit-jupiter:${Versions.junit}"
+    const val kotlinXCoroutinesDebug = "org.jetbrains.kotlinx:kotlinx-coroutines-debug:${Versions.kotlinxCoroutines}"
+    const val kotlinXCoroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.kotlinxCoroutines}"
+    const val kotestTestContainers = "io.kotest:kotest-extensions-testcontainers:${Versions.kotest}"
+    const val kotestAssertionsArrow = "io.kotest:kotest-assertions-arrow:${Versions.kotest}"
+    const val kotestAssertionsKtor = "io.kotest:kotest-assertions-ktor:${Versions.kotest}"
 }

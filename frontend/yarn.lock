@@ -9653,6 +9653,12 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   dependencies:
     minimalistic-assert "^1.0.0"
 
+"webo@file:../build/js":
+  version "0.0.1"
+
+"webo@file:/home/maxim/IdeaProjects/ktor-pastebin/build/js":
+  version "0.0.1"
+
 webpack-bundle-analyzer@3.8.0:
   version "3.8.0"
   resolved "https://registry.yarnpkg.com/webpack-bundle-analyzer/-/webpack-bundle-analyzer-3.8.0.tgz#ce6b3f908daf069fd1f7266f692cbb3bded9ba16"

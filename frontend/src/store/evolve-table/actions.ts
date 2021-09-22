@@ -1,24 +1,26 @@
 import { ActionTree } from 'vuex'
-import { Store } from '../index'
-import { EvolveTableState } from './state'
+import { Store } from 'src/store'
+import { EvolveTableState } from 'src/store/evolve-table/state'
 import Axios, { AxiosResponse } from 'axios'
-import { EvolveJsonLines, EvolveJsonRowsNumber, JsonResponse } from 'components/models'
+import { EvolveJsonLines, EvolveJsonRowsNumber, EvolveLinesModel, JsonResponse } from 'components/models'
 import { FetchDataPayload } from 'src/store/evolve-table/payloads'
 import { Notify } from 'quasar'
+import { api } from 'webo/packages/common'
+import EvolveRowsNumberModel = api.model.EvolveRowsNumberModel
 
 function showErrorMessage(): void {
+  let response: AxiosResponse<EvolveRowsNumberModel>
   Notify.create({
     timeout: 10000,
     multiLine: false,
     type: 'negative',
     closeBtn: true,
-    message: `An error occurred while trying to fetch the data from the server!\n
-               Very not nice of the server! ):<`
+    message: 'An error occurred while trying to fetch the data from the server! Very not nice of the server! ):<'
   })
 }
 
 const actions: ActionTree<EvolveTableState, Store> = {
-  async initialize({ commit, dispatch }, payload) { // TODO
+  initialize: async function({ commit, dispatch }, payload) { // TODO
     let response: AxiosResponse<JsonResponse<EvolveJsonRowsNumber>>
     try {
       response = await Axios.get('/api/evolve/rowsNumberOf/' + payload.name)
@@ -27,8 +29,13 @@ const actions: ActionTree<EvolveTableState, Store> = {
       showErrorMessage()
       throw error
     }
-    // @ts-ignore // TODO
-    const rowsNumber = response.data.data.rowsNumber
+    let rowsNumber: number
+    if (response.data.data) {
+      rowsNumber = response.data.data.rowsNumber
+    } else {
+      showErrorMessage()
+      return
+    }
     commit('initialize', {
       characterName: payload.name,
       rowsNumber
@@ -54,8 +61,14 @@ const actions: ActionTree<EvolveTableState, Store> = {
           }
         }
       )
-      // @ts-ignore // TODO
-      const lines = response.data.data.lines
+      let lines: Array<EvolveLinesModel>
+      if (response.data.data) {
+        lines = response.data.data.lines
+      } else {
+        console.log(response.data.data)
+        showErrorMessage()
+        return
+      }
       commit('fillTable', lines)
       commit('fetched')
     } catch (error) {

@@ -3,33 +3,31 @@ package online.senpai.webo
 import com.fasterxml.jackson.databind.SerializationFeature
 import io.ktor.application.*
 import io.ktor.features.*
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
-import io.ktor.http.HttpStatusCode
-import io.ktor.jackson.jackson
-import io.ktor.locations.KtorExperimentalLocationsAPI
-import io.ktor.locations.Locations
-import io.ktor.request.path
-import io.ktor.response.respond
-import io.ktor.routing.route
-import io.ktor.routing.routing
-import io.ktor.server.netty.EngineMain
-import io.ktor.sessions.Sessions
-import io.ktor.sessions.cookie
-import io.ktor.sessions.directorySessionStorage
-import io.ktor.util.KtorExperimentalAPI
+import io.ktor.http.*
+import io.ktor.jackson.*
+import io.ktor.locations.*
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.routing.*
+import io.ktor.server.netty.*
+import io.ktor.sessions.*
+import io.ktor.util.*
+import online.senpai.codegen.model.EvolveAvailableCharacters
+import online.senpai.codegen.model.EvolveVoiceLinesSortCriteria
+import online.senpai.codegen.model.SortOrder
 import online.senpai.webo.exception.AuthenticationException
 import online.senpai.webo.exception.AuthorizationException
 import online.senpai.webo.exception.BadRequest
+import online.senpai.webo.handler.evolveHandler
 import online.senpai.webo.module.dbConnectionModule
 import online.senpai.webo.module.repositoryModule
 import online.senpai.webo.module.serviceModule
-import online.senpai.webo.router.evolveHandler
 import online.senpai.webo.session.AuthenticatedUser
 import org.koin.ktor.ext.Koin
 import org.koin.logger.SLF4JLogger
 import org.slf4j.event.Level
 import java.io.File
+import java.lang.reflect.Type
 import kotlin.collections.set
 
 fun main(args: Array<String>): Unit = EngineMain.main(args)
@@ -91,7 +89,22 @@ fun Application.main() {
         }
     }*/
 
-    install(DataConversion)
+    install(DataConversion) {
+        // TODO Automate?
+        convert(EvolveVoiceLinesSortCriteria::class) {
+            decode { values: List<String>, _: Type ->
+                EvolveVoiceLinesSortCriteria.values().first { it.name.toLowerCase() in values }
+            }
+        }
+        convert(EvolveAvailableCharacters::class) {
+            decode { values: List<String>, _: Type ->
+                EvolveAvailableCharacters.values().first { it.name.toLowerCase() in values }
+            }
+        }
+        convert(SortOrder::class) {
+            decode { values: List<String>, _: Type -> decodeEnum(values, SortOrder::values) }
+        }
+    }
     install(XForwardedHeaderSupport)
 
     /*install(HSTS) {
@@ -157,9 +170,7 @@ fun Application.main() {
     routing {
         if (isDev) trace { application.log.trace(it.buildText()) }
         route("/api") {
-            route("/evolve") { // TODO
-                evolveHandler()
-            }
+            evolveHandler()
         }
         /*authenticate("githubOauth") {
             route("/user/login/{type?}") {

@@ -1,7 +1,25 @@
 import com.moowork.gradle.node.yarn.YarnTask
 
 plugins {
+    kotlin("js")
     id(Plugins.nodeGradle) version Plugins.Versions.nodeGradle // TODO
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation(kotlin("stdlib-js"))
+    /*implementation(project(":common"))*/
+}
+
+kotlin {
+    js(IR) {
+        browser {
+            binaries.executable()
+        }
+    }
 }
 
 node {

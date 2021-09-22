@@ -9,6 +9,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/camelcase */
 const { configure } = require('quasar/wrappers')
+const path = require('path')
 
 module.exports = configure(function(ctx) {
   return {
@@ -64,7 +65,7 @@ module.exports = configure(function(ctx) {
     },
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
-    supportIE: true,
+    supportIE: false,
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ts
     supportTS: {
@@ -93,6 +94,10 @@ module.exports = configure(function(ctx) {
           test: /\.pug$/,
           loader: 'pug-plain-loader'
         })
+        cfg.resolve.alias = {
+          ...cfg.resolve.alias, // This adds the existing alias
+          common: path.resolve(__dirname, '../build/js/packages/common')
+        }
         // linting is slow in TS projects, we execute it only for production builds
         if (ctx.prod) {
           cfg.module.rules.push({
