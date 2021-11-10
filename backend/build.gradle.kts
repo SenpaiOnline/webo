@@ -1,122 +1,103 @@
 plugins {
-    kotlin("jvm")
-    application
-    id("io.kotest") version Plugins.Versions.kotest
-    id("org.openapi.generator") version Plugins.Versions.openapiGenerator
-}
-
-application {
-    mainClassName = "io.ktor.server.netty.EngineMain"
+    id("org.jetbrains.kotlin.jvm") version "1.5.31"
+    id("org.jetbrains.kotlin.kapt") version "1.5.31"
+    id("com.github.johnrengelman.shadow") version "7.0.0"
+    id("me.qoomon.git-versioning") version "5.1.1"
+    id("io.micronaut.application") version "2.0.8"
+    id("org.jetbrains.kotlin.plugin.allopen") version "1.5.31"
 }
 
 repositories {
-    mavenLocal()
-    jcenter()
-    maven { url = uri("https://kotlin.bintray.com/ktor") }
-    maven { url = uri("https://dl.bintray.com/kotlin/kotlin-eap") }
-    maven { url = uri("https://philanthropist.touk.pl/nexus/content/repositories/releases") }
-    maven { url = uri("https://dl.bintray.com/arrow-kt/arrow-kt/") }
-    maven { url = uri("https://oss.jfrog.org/artifactory/oss-snapshot-local/") }
-    maven { url = uri("https://dl.bintray.com/konform-kt/konform") }
+    mavenCentral()
+}
+
+micronaut {
+    version("3.1.3")
+    runtime("netty")
+    testRuntime("kotest")
+    processing {
+        incremental(true)
+        annotations("online.senpai.webo.*")
+    }
+}
+
+allOpen {
+    annotations(
+        "io.micronaut.core.annotation.Introspected",
+        "io.micronaut.validation.Validated"
+    )
 }
 
 dependencies {
-    // Ktor
-    implementation(Libraries.ktorServerCore)
-    implementation(Libraries.ktorServerNetty)
-    implementation(Libraries.ktorHtmlBuilder)
-    implementation(Libraries.ktorFreemarker)
-    implementation(Libraries.ktorServerHostCommon)
-    implementation(Libraries.ktorLocations)
-    implementation(Libraries.ktorMetrics)
-    implementation(Libraries.ktorServerSessions)
-    implementation(Libraries.ktorWebsockets)
-    implementation(Libraries.ktorAuth)
-    implementation(Libraries.ktorAuthJwt)
-    implementation(Libraries.ktorJackson)
-    implementation(Libraries.ktorSerialization)
-    implementation(Libraries.mpierceKtorCsrf)
-
-    // Ktor client
-    implementation(Libraries.ktorClientApache)
-    implementation(Libraries.ktorClientJson)
-    implementation(Libraries.ktorClientJackson)
-
-    // Logging
-    implementation(Libraries.kotlinLogging)
-    implementation(Libraries.logbackClassic)
-
-    // Database
-    implementation(Libraries.hikariCP)
-    implementation(Libraries.postgres)
-    implementation(Libraries.exposedCore)
-    implementation(Libraries.exposedDao)
-    implementation(Libraries.exposedJdbc)
-    implementation(Libraries.exposedJavaTime)
-    /*api(Libraries.krushAnnotationProcessor)
-    kapt(Libraries.krushAnnotationProcessor)
-    api(Libraries.krushRuntime)*/
-    implementation(Libraries.kmongoCoroutine)
-    /*implementation(Libraries.kotlinxSerialization)*/
-
-    // Dependency injection
-    implementation(Libraries.koinCore)
-    implementation(Libraries.koinKtor)
-    implementation(Libraries.koinSlf4j)
-
-    // Arrow
-    implementation(Libraries.arrowFx)
-    implementation(Libraries.arrowFxCoroutines)
-    implementation(Libraries.arrowSyntax)
-
-    // Validation
-    implementation(Libraries.kalidation)
-    implementation(Libraries.valiktor)
-    implementation(Libraries.konform)
-
-//    implementation(project(":common"))
-
-    testImplementation(TestLibraries.junitJupiter)
-    testImplementation(TestLibraries.ktorServerTests)
-    testImplementation(TestLibraries.koinTest)
-    testImplementation(TestLibraries.testContainersJupiter)
-    testImplementation(TestLibraries.testContainersNginx)
-    testImplementation(TestLibraries.testContainersMongodb)
-    testImplementation(TestLibraries.testContainersToxiproxy)
-    testImplementation(TestLibraries.mockk)
-    testImplementation(TestLibraries.striktArrow)
-    testImplementation(TestLibraries.striktJackson)
-    testImplementation(TestLibraries.striktMockk)
-    testImplementation(TestLibraries.kotlinXCoroutinesDebug)
-    testImplementation(TestLibraries.kotlinXCoroutinesTest)
-    testImplementation(TestLibraries.kotestTestContainers)
-    testImplementation(TestLibraries.kotestAssertionsArrow)
-    testImplementation(TestLibraries.kotestAssertionsKtor)
+    kapt("org.mapstruct:mapstruct-processor:1.4.2.Final")
+    kapt("io.micronaut:micronaut-http-validation")
+    kapt("io.micronaut.data:micronaut-data-processor")
+    kapt("io.micronaut.openapi:micronaut-openapi")
+    kapt("io.micronaut.security:micronaut-security-annotations")
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut:micronaut-runtime")
+    implementation("io.micronaut.data:micronaut-data-r2dbc")
+    implementation("io.micronaut.kotlin:micronaut-kotlin-extension-functions")
+    implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
+    implementation("io.micronaut.problem:micronaut-problem-json")
+    implementation("io.micronaut.r2dbc:micronaut-r2dbc-core")
+    implementation("io.micronaut.reactor:micronaut-reactor")
+    implementation("io.micronaut.reactor:micronaut-reactor-http-client")
+    implementation("io.micronaut.security:micronaut-security")
+    implementation("io.swagger.core.v3:swagger-annotations")
+    implementation("javax.annotation:javax.annotation-api")
+    implementation("io.micronaut:micronaut-validation")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31")
+    implementation("org.mapstruct:mapstruct:1.4.2.Final")
+    compileOnly("javax.inject:javax.inject:1")
+    compileOnly("jakarta.persistence:jakarta.persistence-api:2.2.2")
+    compileOnly("org.graalvm.nativeimage:svm")
+    runtimeOnly("ch.qos.logback:logback-classic")
+    runtimeOnly("io.r2dbc:r2dbc-postgresql")
+    runtimeOnly("org.postgresql:postgresql")
+    runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
+    runtimeOnly("io.netty:netty-transport-native-epoll")
+    testImplementation("org.testcontainers:r2dbc")
+    testImplementation("org.testcontainers:testcontainers")
 }
 
+
+application {
+    mainClass.set("online.senpai.webo.ApplicationKt")
+}
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.toVersion("11")
+}
+
+kapt {
+    arguments {
+        arg("mapstruct.defaultComponentModel", "jsr330")
+        arg("mapstruct.defaultInjectionStrategy", "constructor")
+    }
 }
 
 tasks {
     compileKotlin {
-        kotlinOptions.jvmTarget = "11"
+        kotlinOptions {
+            kotlinOptions.languageVersion = "1.5"
+            kotlinOptions.jvmTarget = "11"
+        }
     }
     compileTestKotlin {
-        kotlinOptions.jvmTarget = "11"
-    }
-    test {
-        useJUnitPlatform()
-        testLogging {
-            events("passed", "skipped", "failed")
+        kotlinOptions {
+            kotlinOptions.languageVersion = "1.5"
+            kotlinOptions.jvmTarget = "11"
         }
+    }
+    processResources {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
 }
 
 sourceSets {
     main {
-        java.srcDirs("src/main/kotlin", "build/generated/openapi/src/main/kotlin")
+        java.srcDirs("src/main/kotlin")
         resources.srcDirs("src/main/resources")
     }
     test {
@@ -125,37 +106,17 @@ sourceSets {
     }
 }
 
-openApiGenerate {
-    generatorName.set("kotlin-server")
-    inputSpec.set("$rootDir/OpenAPI-schema.yaml")
-    templateDir.set("$rootDir/openapi-templates")
-    outputDir.set("$buildDir/generated/openapi")
+gitVersioning.apply {
+    refs {
+        branch(".+") {
+            version = "\${ref}-SNAPSHOT"
+        }
+        tag("v(?<version>.*)") {
+            version = "\${ref.version}"
+        }
+    }
 
-    apiPackage.set("online.senpai.codegen.api")
-    modelPackage.set("online.senpai.codegen.model")
-    packageName.set("online.senpai.codegen")
-    configOptions.set(
-        mapOf(
-            "dateLibrary" to "java8",
-            "enumPropertyNaming" to "UPPERCASE",
-            "generateModelTests" to "false",
-            "generateModelDocumentation" to "false",
-            "generateApiTests" to "false",
-            "generateApiDocumentation" to "false",
-            "modelMutable" to "true",
-            "serializationLibrary" to "jackson"
-        )
-    )
-    globalProperties.set(
-        mapOf(
-            "supportingFiles" to "Paths.kt",
-            "apis" to "",
-            "models" to ""
-        )
-    )
-    typeMappings.set(
-        mapOf(
-            "array" to "kotlin.collections.List"
-        )
-    )
+    rev {
+        version = "\${commit}"
+    }
 }

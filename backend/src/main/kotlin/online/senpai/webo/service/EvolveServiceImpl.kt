@@ -1,59 +1,22 @@
 package online.senpai.webo.service
 
-import arrow.core.Either
-import arrow.core.NonEmptyList
-import online.senpai.codegen.model.*
-import online.senpai.webo.model.evolve.RowsNumberModel
-import online.senpai.webo.repository.EvolveDataProviderError
-import online.senpai.webo.repository.EvolveDomain
-import online.senpai.webo.repository.EvolveRepository
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
+import online.senpai.webo.EvolveCharacter
+import online.senpai.webo.EvolveDialoguesRepository
+import online.senpai.webo.dto.evolve.EvolveDialogueDto
+import online.senpai.webo.mapper.EvolveDialogueMapper
+import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
-class EvolveServiceImpl : EvolveService, KoinComponent {
-    private val repository: EvolveRepository by inject()
+@Singleton
+class EvolveServiceImpl @Inject constructor(
+    private val repository: EvolveDialoguesRepository,
+    private val mapper: EvolveDialogueMapper
+) : EvolveService {
+    override fun countByCharacter(character: EvolveCharacter): Mono<Number> =
+        repository.countByCharacter(character)
 
-    override suspend fun characterLines(
-        characterName: EvolveAvailableCharacters
-    ): Either<EvolveDataProviderError, EvolveVoiceLines> = repository
-            .listAll(characterName.value)
-            .map { listOfEvolveDomains: NonEmptyList<EvolveDomain> ->
-                EvolveVoiceLines(
-                    lines = listOfEvolveDomains
-                        .map { domainModel: EvolveDomain ->
-                            EvolveVoiceLine(
-                                id = domainModel.lineName,
-                                text = domainModel.lineText,
-                                files = domainModel.filePath.toList()
-                            )
-                        }
-                )
-            }
-
-    override suspend fun characterLines(
-        characterName: EvolveAvailableCharacters,
-        offset: Int,
-        limit: Int,
-        sortCriteria: EvolveVoiceLinesSortCriteria,
-        sortOrder: SortOrder
-    ): Either<EvolveDataProviderError, EvolveVoiceLines> = repository
-            .listAll(characterName.value, offset, limit, sortCriteria, sortOrder)
-            .map { listOfEvolveDomains: NonEmptyList<EvolveDomain> ->
-                EvolveVoiceLines(
-                    lines = listOfEvolveDomains
-                        .map { domainModel: EvolveDomain ->
-                            EvolveVoiceLine(
-                                id = domainModel.lineName,
-                                text = domainModel.lineText,
-                                files = domainModel.filePath.toList()
-                            )
-                        }
-                )
-            }
-
-    override suspend fun characterRowsNumber(
-        name: String
-    ): Either<EvolveDataProviderError, RowsNumberModel> = repository
-            .rowsNumber(name)
-            .map { RowsNumberModel(it) }
+    override fun findTwentyDialoguesByCharacter(character: EvolveCharacter, offset: Long): Flux<EvolveDialogueDto> =
+        repository.findByCharacter(character, offset).map(mapper::entityToDto)
 }

@@ -1,14 +1,15 @@
-version: "3.7"
+version: "3.9"
 services:
 
-  db:
-    image: docker.io/postgres:11.7
+  postgres:
+    image: docker.io/postgres:14
     volumes:
-      - db-data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     ports:
-    - "5433:5432"
+    - "5432:5432"
     environment:
-      - POSTGRES_PASSWORD=dev
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     networks:
       - backend
 
@@ -26,18 +27,7 @@ services:
     environment:
       - NGINX_HOST=q6kfjhnpdimvjhkrk2fm.senpai.online
       - NGINX_PORT=80
-    command: [nginx-debug, '-g', 'daemon off;']
-    #    command: ["nginx", "-g", "daemon off;"]
-    networks:
-      - backend
-
-  mongo:
-    image: docker.io/mongo:4.2
-    ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: mongo
-      MONGO_INITDB_ROOT_PASSWORD: mongo
+    command: ['nginx-debug', '-g', 'daemon off;']
     networks:
       - backend
 
@@ -52,4 +42,4 @@ networks:
   backend:
 
 volumes:
-  db-data:
+  postgres-data:
