@@ -1,0 +1,15 @@
+micronaut:
+  application:
+    name: webo
+r2dbc:
+  datasources:
+    default:
+      schema-generate: create
+      dialect: postgres
+      url: r2dbc:postgresql://localhost:5432/postgres
+      username: postgres
+      password: postgres
+netty:
+  event-loops:
+    default:
+      prefer-native-transport: true
