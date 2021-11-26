@@ -1,10 +1,10 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.5.31"
-    id("org.jetbrains.kotlin.kapt") version "1.5.31"
-    id("com.github.johnrengelman.shadow") version "7.0.0"
+    id("org.jetbrains.kotlin.jvm") version "1.6.0"
+    id("org.jetbrains.kotlin.kapt") version "1.6.0"
+    id("com.github.johnrengelman.shadow") version "7.1.0"
     id("me.qoomon.git-versioning") version "5.1.1"
-    id("io.micronaut.application") version "2.0.8"
-    id("org.jetbrains.kotlin.plugin.allopen") version "1.5.31"
+    id("io.micronaut.application") version "3.0.0"
+    id("org.jetbrains.kotlin.plugin.allopen") version "1.6.0"
 }
 
 repositories {
@@ -12,7 +12,7 @@ repositories {
 }
 
 micronaut {
-    version("3.1.3")
+    version("3.2.0")
     runtime("netty")
     testRuntime("kotest")
     processing {
@@ -80,13 +80,13 @@ kapt {
 tasks {
     compileKotlin {
         kotlinOptions {
-            kotlinOptions.languageVersion = "1.5"
+            kotlinOptions.languageVersion = "1.6"
             kotlinOptions.jvmTarget = "11"
         }
     }
     compileTestKotlin {
         kotlinOptions {
-            kotlinOptions.languageVersion = "1.5"
+            kotlinOptions.languageVersion = "1.6"
             kotlinOptions.jvmTarget = "11"
         }
     }
