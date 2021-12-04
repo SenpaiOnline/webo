@@ -43,6 +43,7 @@ dependencies {
     implementation("io.micronaut.r2dbc:micronaut-r2dbc-core")
     implementation("io.micronaut.reactor:micronaut-reactor")
     implementation("io.micronaut.reactor:micronaut-reactor-http-client")
+    implementation("io.projectreactor.kotlin:reactor-kotlin-extensions:1.1.5")
     implementation("io.micronaut.security:micronaut-security")
     implementation("io.swagger.core.v3:swagger-annotations")
     implementation("javax.annotation:javax.annotation-api")

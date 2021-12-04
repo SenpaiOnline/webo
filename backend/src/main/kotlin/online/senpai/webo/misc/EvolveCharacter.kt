@@ -1,4 +1,4 @@
-package online.senpai.webo
+package online.senpai.webo.misc
 
 enum class EvolveCharacter {
     ABE,
