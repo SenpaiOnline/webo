@@ -1,10 +1,11 @@
-package online.senpai.webo
+package online.senpai.webo.repository
 
 import io.micronaut.data.annotation.Query
 import io.micronaut.data.model.query.builder.sql.Dialect
 import io.micronaut.data.r2dbc.annotation.R2dbcRepository
 import io.micronaut.data.repository.reactive.ReactorCrudRepository
 import online.senpai.webo.entity.evolve.EvolveDialogueEntity
+import online.senpai.webo.misc.EvolveCharacter
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 

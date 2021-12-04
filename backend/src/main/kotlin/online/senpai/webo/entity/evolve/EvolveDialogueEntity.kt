@@ -2,8 +2,8 @@ package online.senpai.webo.entity.evolve
 
 import io.micronaut.data.annotation.Index
 import io.micronaut.data.annotation.MappedEntity
-import online.senpai.webo.EvolveCharacter
 import online.senpai.webo.entity.common.GenericInGameDialogueEntity
+import online.senpai.webo.misc.EvolveCharacter
 
 @MappedEntity("evolve_dialogues")
 @Index(columns = ["name"], unique = true)
