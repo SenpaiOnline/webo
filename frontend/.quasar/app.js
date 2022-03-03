@@ -9,53 +9,40 @@
  *
  * Boot files are your "main.js"
  **/
-import Vue from 'vue'
-import './import-quasar.js'
 
 
-import App from 'app/src/App.vue'
+import {Quasar} from 'quasar'
+import RootComponent from 'app/src/App.vue'
 
-
-import createStore from 'app/src/store/index'
 
 import createRouter from 'app/src/router/index'
 
 
-export default async function () {
+export default async function (createAppFn, quasarUserOptions) {
   // create store and router instances
-  
-  const store = typeof createStore === 'function'
-    ? await createStore({Vue})
-    : createStore
-  
+
   const router = typeof createRouter === 'function'
-    ? await createRouter({Vue, store})
+    ? await createRouter({})
     : createRouter
-  
-  // make router instance available in store
-  store.$router = router
-  
-
-  // Create the app instantiation Object.
-  // Here we inject the router, store to all child components,
-  // making them available everywhere as `this.$router` and `this.$store`.
-  const app = {
-    router,
-    store,
-    render: h => h(App)
-  }
 
 
-  
-  app.el = '#q-app'
-  
+  // Create the app instance.
+  // Here we inject into it the Quasar UI, the router & possibly the store.
+  const app = createAppFn(RootComponent)
 
-  // expose the app, the router and the store.
-  // note we are not mounting the app here, since bootstrapping will be
+
+  app.config.devtools = true
+
+
+  app.use(Quasar, quasarUserOptions)
+
+
+  // Expose the app, the router and the store.
+  // Note that we are not mounting the app here, since bootstrapping will be
   // different depending on whether we are in a browser or on the server.
   return {
     app,
-    store,
+
     router
   }
 }

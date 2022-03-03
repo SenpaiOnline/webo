@@ -2,11 +2,11 @@ package online.senpai.webo.service
 
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
-import online.senpai.webo.EvolveDialoguesRepository
 import online.senpai.webo.dto.evolve.EvolveDialogueDto
 import online.senpai.webo.dto.evolve.EvolveDialoguesMetaDto
 import online.senpai.webo.mapper.EvolveDialogueMapper
 import online.senpai.webo.misc.EvolveCharacter
+import online.senpai.webo.repository.EvolveDialoguesRepository
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.util.context.Context

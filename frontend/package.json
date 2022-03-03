@@ -1,60 +1,51 @@
 {
   "name": "webo",
   "version": "0.0.1",
-  "description": "A Quasar Framework app",
-  "productName": "webo",
-  "cordovaId": "org.cordova.quasar.app",
-  "capacitorId": "",
-  "author": "Maxim Valeryevich Pavlov <maxpav137@gmail.com>",
+  "description": "A web app",
+  "productName": "Webo",
+  "author": "Maxim Pavlov <maxpav137@gmail.com>",
   "private": true,
   "scripts": {
-    "dev": "quasar dev",
-    "build": "quasar build",
-    "lint": "eslint --ext .js,.ts,.vue --ignore-path .gitignore ./",
+    "lint": "eslint --ext .js,.ts,.vue ./",
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "@quasar/extras": "^1.9.2",
-    "@quasar/quasar-ui-qmediaplayer": "^1.0.27",
-    "@vue/composition-api": "^0.5.0",
-    "@vuex-orm/core": "^0.36.3",
-    "@vuex-orm/plugin-axios": "^0.9.3",
-    "axios": "^0.18.1",
-    "node-sass": "^4.14.1",
-    "quasar": "^1.12.13",
-    "vue": "^2.6.11",
-    "vue-i18n": "^8.0.0",
-    "vuex": "^3.4.0",
-    "vuex-orm-decorators": "^1.1.9",
-    "webo": "file:/home/maxim/IdeaProjects/ktor-pastebin/build/js"
+    "@quasar/extras": "^1.12.5",
+    "@vueuse/core": "^7.2.2",
+    "autoprefixer": "^10.4.2",
+    "axios": "^0.21.1",
+    "core-js": "^3.6.5",
+    "pinia": "^2.0.3",
+    "quasar": "^2.5.5",
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.0"
   },
   "devDependencies": {
-    "@quasar/app": "^1.9.6",
-    "@quasar/quasar-app-extension-qmediaplayer": "^1.0.27",
-    "@types/node": "^10.17.15",
-    "@typescript-eslint/eslint-plugin": "^2.17.0",
-    "@typescript-eslint/parser": "^2.17.0",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^6.8.0",
-    "eslint-config-standard": "^14.1.0",
-    "eslint-loader": "^3.0.3",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-node": "^11.0.0",
-    "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-standard": "^4.0.0",
-    "eslint-plugin-vue": "^6.1.2",
-    "pug": "^3.0.0",
-    "pug-plain-loader": "^1.0.0"
-  },
-  "engines": {
-    "node": ">= 10.18.1",
-    "npm": ">= 6.13.4",
-    "yarn": ">= 1.21.1"
+    "@babel/eslint-parser": "^7.13.14",
+    "@quasar/app": "^3.3.3",
+    "@types/node": "^12.20.21",
+    "@typescript-eslint/eslint-plugin": "^4.16.1",
+    "@typescript-eslint/parser": "^4.16.1",
+    "eslint": "^7.14.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-vue": "^7.0.0",
+    "pug": "^3.0.2",
+    "pug-plain-loader": "^1.1.0"
   },
   "browserslist": [
-    "last 1 version, not dead, ie >= 11"
+    "last 10 Chrome versions",
+    "last 10 Firefox versions",
+    "last 4 Edge versions",
+    "last 7 Safari versions",
+    "last 8 Android versions",
+    "last 8 ChromeAndroid versions",
+    "last 8 FirefoxAndroid versions",
+    "last 10 iOS versions",
+    "last 5 Opera versions"
   ],
-  "resolutions": {
-    "@babel/parser": "7.7.5"
+  "engines": {
+    "node": ">= 12.22.1",
+    "npm": ">= 6.13.4",
+    "yarn": ">= 1.21.1"
   }
 }

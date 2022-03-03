@@ -1,23 +1,23 @@
-<template lang="pug">
-  q-item(clickable, v-ripple, :to='to', :inset-level='insetLevel')
-    q-item-section(avatar)
-      q-avatar(rounded, size='70px')
-        img(:src='imageSrc')
-    q-item-section
-      q-item-label
-        | {{ characterName }}
+<template lang='pug'>
+q-item(clickable v-ripple :to='to' :inset-level='insetLevel')
+  q-item-section(avatar)
+    q-avatar(rounded size='100px' :style='imageStyle')
+  q-item-section
+    q-item-label {{ characterName }}
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
+<script lang='ts'>
+import { defineComponent } from 'vue'
 
-export default Vue.extend({
+export default defineComponent({
   name: 'EvolveMenuItem',
+
   props: {
     imageSrc: {
       type: String,
       required: true
     },
+    imageStyle: String,
     to: {
       type: String,
       required: true
@@ -28,12 +28,8 @@ export default Vue.extend({
     },
     insetLevel: {
       type: Number,
-      default: 0.2
+      default: 0
     }
   }
 })
 </script>
-
-<style scoped>
-
-</style>

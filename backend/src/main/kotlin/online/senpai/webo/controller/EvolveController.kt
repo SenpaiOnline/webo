@@ -21,7 +21,7 @@ import reactor.core.publisher.Mono
 class EvolveController @Inject constructor(
     private val service: EvolveService,
 ) {
-    @Get("/meta/dialogues/{character}")
+    @Get("/meta/dialogues/total/{character}")
     fun countDialoguesByCharacter(
         @PathVariable character: EvolveCharacter
     ): Mono<EvolveDialoguesMetaDto> =
