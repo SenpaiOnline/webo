@@ -1,49 +1,79 @@
-<template lang="pug">
-  q-toolbar.row.no-wrap.bg-purple.text-white.shadow-1
-    .col-2
-      q-btn(v-if='showLeftDrawerButton', flat, round, dense, icon='menu', @click='toggleLeftDrawer')
-    .col-10
-      q-btn-group
-        router-link(to='/', exact)
-          template(v-slot='props')
-            q-btn(label='homepage', v-bind='buttonProps(props)')
-        router-link(to='/evolve')
-          template(v-slot='props')
-            q-btn(label='evolve', v-bind='buttonProps(props)')
-        q-btn(label='vermintide2', disable)
+<template lang='pug'>
+q-toolbar.bg-primary.text-white.shadow-2
+  q-btn.q-mr-sm(v-show='showLeftDrawerButton' flat round dense icon='menu' @click='toggleLeftDrawer')
+  q-separator(dark vertical inset)
+  q-space
+  q-tabs
+    q-route-tab(label='Home' name='home' :to='{ name: "index" }' exact)
+    q-route-tab(label='Evolve' name='evolve' :to='{ name: "evolve" }')
+
+    //router-link(to='/' custom v-slot='{ href, route, navigate, isActive, isExactActive }')
+    //  //q-btn.stretch.flat(label='homepage' :class='[isExactActive && \'router-link-exact-active\']')
+    //router-link(to='/evolve' custom v-slot='{ href, route, navigate, isActive, isExactActive }')
+    //  //q-btn.stretch.flat(label='evolve' :class='[isActive && \'router-link-active\', isExactActive && \'router-link-exact-active\']')
+    //router-link(to='/vermintide2' custom v-slot='{ href, route, navigate, isActive, isExactActive }')
+    //  //q-btn.stretch.flat(label='vermintide2' :class='[isActive && \'router-link-active\', isExactActive && \'router-link-exact-active\']')
+    //router-link(to='/' custom v-slot='props')
+    //  q-btn(label='homepage' v-bind='buttonProps(props)')
+    //router-link(to='/evolve' custom v-slot='props')
+    //  q-btn(label='evolve' v-bind='buttonProps(props)')
+    //router-link(to='/vermintide2' custom v-slot='props')
+    //  q-btn(label='vermintide2' v-bind='buttonProps(props)' disable)
+  q-space
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { createNamespacedHelpers } from 'vuex'
+<script lang='ts'>
+import { defineComponent } from 'vue'
+import { useDrawersStore } from 'src/stores/useDrawersStore'
 
-const { mapActions } = createNamespacedHelpers('evolveLayout')
-
-export default Vue.extend({
+export default defineComponent({
   name: 'TopNavBar',
+
   props: {
     showLeftDrawerButton: {
       type: Boolean,
-      default: false
+      required: true
+    },
+    showRightDrawerButton: {
+      type: Boolean,
+      required: true
     }
   },
-  methods: {
-    ...mapActions([
-      'toggleLeftDrawer'
-    ]),
-    buttonProps(x: { href: string; isActive: boolean }) {
+
+  setup() {
+    const drawers = useDrawersStore()
+
+    const buttonProps = (route: { href: string, isActive: boolean }) => {
       const props = {
         color: '',
         noCaps: false,
         outline: false,
-        to: x.href
+        to: route.href
       }
-
-      if (x.isActive) {
+      if (route.isActive) {
         props.color = 'deep-purple'
       }
       return props
     }
+
+    return {
+      buttonProps,
+      toggleLeftDrawer: drawers.toggleLeftDrawer,
+      toggleRightDrawer: drawers.toggleRightDrawer
+    }
   }
 })
 </script>
+
+<style lang='sass' scoped>
+.router-link-active
+  color: red
+
+.router-link-exact-active
+  color: blue
+
+
+.my-menu-link
+  background-color: rgb(29, 139, 246)
+//background: #F2C037
+</style>

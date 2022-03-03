@@ -1,25 +1,49 @@
-import { RouteConfig } from 'vue-router'
+import { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 
-const routes: RouteConfig[] = [
+const layoutMainLayout = () => import('layouts/MainLayout.vue')
+
+const pageIndex = () => import('pages/Index.vue')
+const pageEvolveData = () => import(/* webpackChunkName: 'evolve' */ 'pages/EvolveData.vue')
+
+const componentMainPageLeftDrawer = () => import('components/MainPageLeftDrawer.vue')
+const componentEvolveLeftDrawer = () => import(/* webpackChunkName: 'evolve' */ 'components/EvolveLeftDrawer.vue')
+const componentAudioPlayer = () => import('components/AudioPlayer.vue')
+
+const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    component: layoutMainLayout,
+    props: { showLeftDrawerButton: true },
     children: [
-      { path: '', component: () => import('pages/Index.vue') }
-    ]
+      {
+        path: '',
+        name: 'index',
+        components: {
+          default: pageIndex,
+          leftDrawer: componentMainPageLeftDrawer
+        }
+      },
+      {
+        path: 'evolve/:character?/:page?',
+        name: 'evolve',
+        components: {
+          default: pageEvolveData,
+          leftDrawer: componentEvolveLeftDrawer,
+          footer: componentAudioPlayer
+        },
+        props: {
+          default: (route: RouteLocationNormalized) => ({
+            character: route.params.character,
+            page: Number.parseInt(route.params.page as string, 10) || 1
+          })
+        }
+      }
+    ],
   },
   {
-    path: '/evolve',
-    component: () => import('layouts/EvolveLayout.vue'),
-    children: [
-      { path: '', component: () => import('pages/EvolveMain.vue') },
-      { path: ':name', component: () => import('pages/EvolveData.vue') }
-    ]
+    path: '/:catchAll(.*)*',
+    component: () => import('pages/Error404.vue'),
   },
-  {
-    path: '*',
-    component: () => import('pages/Error404.vue')
-  }
 ]
 
 export default routes

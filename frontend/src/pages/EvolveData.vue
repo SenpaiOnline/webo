@@ -1,112 +1,162 @@
-<template lang="pug">
-  q-page(padding)
-    q-table(:pagination.sync='pagination', :data='tableData', :columns='tableColumns', row-key='name',
-      :loading='isFetchingData', binary-state-sort, :rows-per-page-options='[25]', dense, flat
-    )
-      template(v-slot:body-cell-audio='props')
-        q-td(:props='props', auto-width=true)
-          .column
-            .col(v-for='item in props.row.files' :key='item')
-              q-media-player(dense, type='audio', :volume='volume', :source='item', preload='none'
-                hide-volume-slider, cross-origin='anonymous', background-color='indigo-3'
-              )
-                template(v-slot:volume)
-                  div
-      template(v-slot:loading)
-        q-inner-loading(showing, color='primary')
-      template(v-if='hasData', v-slot:top-right='props')
-        q-pagination(:value='pagination.page', color='purple', :max='props.pagesNumber',
-          :max-pages='maxPagesAtTime', @input='onRequest', :to-fn='createPaginationLink'
-        )
-      template(v-if='hasData', v-slot:pagination='props')
-        q-pagination(:value='pagination.page', color='purple', :max='props.pagesNumber',
-          :max-pages='maxPagesAtTime', @input='onRequest', :to-fn='createPaginationLink'
-        )
-    q-page-scroller(position='bottom', :scroll-offset='250', :offset='[0, 5]')
-      q-btn(fab, icon='keyboard_arrow_up', color='accent')
-    q-page-sticky(position='bottom-left', :offset='[10, 10]')
-      q-btn(round, color='primary', :icon='selectVolumeButtonIcon')
-        q-popup-edit(v-model='volume', auto-save, :cover='false', :offset='[0, 5]')
-          q-field(borderless, label='')
-            template(v-slot:control)
-              q-slider(v-model='volume', :min='0', :max='100', label, label-always, style={'width': '200px'})
+<template lang='pug'>
+q-page(padding)
+  q-table(
+    v-if='character'
+    :pagination='pagination'
+    :rows='tableData'
+    :columns='tableColumns'
+    :row-key='rowKey'
+    :loading='loading'
+    @request="onRequest",
+    wrap-cells
+    flat
+    :rows-per-page-options='[]'
+  )
+    template(v-slot:loading)
+      q-inner-loading(showing color='primary')
+    template(v-slot:body-cell-audio='props')
+      q-td(:props='props')
+        q-btn(v-for='audio in props.row.audio' icon='play_arrow' @click='loadAndPlay(audio)' padding='xs')
+    template(v-slot:top-right='props')
+      q-pagination(
+        v-model='pagination.page'
+        :max='lastPage'
+        :max-pages='maxPagesAtTime'
+        :to-fn='createPaginationLink'
+        boundary-numbers
+      )
+    template(v-slot:pagination='props')
+      q-pagination(
+        v-model='pagination.page'
+        :max='lastPage'
+        :max-pages='maxPagesAtTime'
+        :to-fn='createPaginationLink'
+        boundary-numbers
+      )
+  .row.items-center.justify-center(v-else)
+    p I'm the main page of that layout!
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { createNamespacedHelpers } from 'vuex'
+<script lang='ts'>
+import { useEvolveDialoguesStore } from 'src/stores/useEvolveDialoguesStore'
+import { computed, defineComponent, onMounted, onUnmounted, ref, watch } from 'vue'
+import { onBeforeRouteUpdate, useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { EvolveCharacter } from 'src/openapi'
+import { useQuasar } from 'quasar'
+import AudioPlayer from 'components/AudioPlayer.vue'
+import { useAudioPlayer } from 'src/stores/useAudioPlayer'
+import { useDrawersStore } from 'src/stores/useDrawersStore'
 
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers('evolveTable')
-
-export default Vue.extend({
+export default defineComponent({
   name: 'EvolveData',
-  data() {
+
+  components: {
+    AudioPlayer
+  },
+
+  props: {
+    character: {
+      type: String,
+      required: false
+    },
+    page: {
+      type: Number,
+      required: true
+    }
+  },
+
+  setup(props) {
+    const q = useQuasar()
+    const volume = ref(80) // TODO
+    const evolveDialoguesStore = useEvolveDialoguesStore()
+    const audioPlayerStore = useAudioPlayer()
+    const router = useRouter()
+    const {
+      hasData,
+      maxPagesAtTime,
+      tableData,
+      tableColumns,
+      loading,
+      pagination,
+      rowKey
+    } = storeToRefs(evolveDialoguesStore)
+    const drawersStore = useDrawersStore()
+    const { leftDrawerOpen } = storeToRefs(drawersStore)
+
+    const lastPage = computed(() => Math.ceil(pagination.value.rowsNumber / pagination.value.rowsPerPage))
+
+    watch(
+      () => props.character,
+      async (character) => {
+        if (!character) {
+          return
+        }
+        try {
+          await evolveDialoguesStore.initialize(<EvolveCharacter> character)
+          await evolveDialoguesStore.fetchData(props.page)
+        } catch (e) {
+          console.error(e)
+          q.notify({
+            type: 'negative',
+            message: 'Internal server error. The error is mine.',
+            timeout: 10000,
+            actions: [
+              { label: 'Close', icon: 'close', color: 'white' },
+              {
+                label: 'Retry', icon: 'restart_alt', color: 'white', handler: () => {
+                  router.go(0)
+                }
+              } // FIXME
+            ],
+          })
+        }
+      },
+      { immediate: true })
+
+    watch(() => props.page, (page) => onRequest(page))
+
+    onMounted(() => {
+      if (!leftDrawerOpen.value) {
+        drawersStore.toggleLeftDrawer()
+      }
+    })
+
+    onUnmounted(() => evolveDialoguesStore.terminate())
+
+    onBeforeRouteUpdate((to, from, next) => {
+      if (to.params.character !== from.params.character) {
+        evolveDialoguesStore.terminate()
+      }
+      next()
+    })
+
+    const onRequest = async (page: number) => {
+      await evolveDialoguesStore.fetchData(page)
+    }
+
+    const createPaginationLink = (page: number) => ({
+      params: {
+        character: props.character,
+        page: page
+      }
+    })
+
     return {
-      volume: 80
+      volume,
+      hasData,
+      maxPagesAtTime,
+      tableData,
+      tableColumns,
+      pagination,
+      loading,
+      rowKey,
+      lastPage,
+
+      createPaginationLink,
+      onRequest,
+      loadAndPlay: audioPlayerStore.loadAndPlay
     }
-  },
-  methods: {
-    ...mapActions([
-      'terminate',
-      'initialize',
-      'fetchData'
-    ]),
-    onRequest(page: number): void {
-      this.fetchData({ page })
-    },
-    init(): void {
-      const page = this.$route.query.page
-      if (page) {
-        this.initialize({ name: this.$route.params.name, page: +page })
-      } else {
-        this.initialize({ name: this.$route.params.name, page: 1 })
-      }
-    }
-  },
-  computed: {
-    ...mapState([
-      'tableData',
-      'tableColumns',
-      'pagination',
-      'isFetchingData',
-      'maxPagesAtTime'
-    ]),
-    ...mapGetters([
-      'hasData'
-    ]),
-    createPaginationLink(): Function {
-      return (page: number) => ({ query: { page } })
-    },
-    selectVolumeButtonIcon(): string {
-      const { volume } = this
-      if (volume === 0) {
-        return 'volume_off'
-      } else if (volume >= 1 && volume <= 29) {
-        return 'volume_mute'
-      } else if (volume >= 30 && volume <= 59) {
-        return 'volume_down'
-      } else {
-        return 'volume_up'
-      }
-    }
-  },
-  watch: {
-    $route: function() {
-      this.init()
-    }
-  },
-  mounted() {
-    this.init()
-  },
-  beforeRouteUpdate(to, from, next) {
-    if (to.path !== from.path) {
-      this.terminate()
-    }
-    next()
-  },
-  beforeRouteLeave(to, from, next) {
-    this.terminate()
-    next()
   }
 })
 </script>

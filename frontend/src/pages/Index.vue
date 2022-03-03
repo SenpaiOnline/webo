@@ -1,25 +1,24 @@
-<template>
-  <q-page class="row items-center justify-evenly">
-    <example-component
-        title="Example component"
-        active
-        :todos="todos"
-        :meta="meta"
-    ></example-component>
-  </q-page>
+<template lang='pug'>
+q-page.row.items-center.justify-evenly
+  example-component(title='Example component' active :todos='todos' :meta='meta')
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-
-import ExampleComponent from 'components/CompositionComponent.vue'
+<script lang='ts'>
 import { Meta, Todo } from 'components/models'
+import ExampleComponent from 'components/CompositionComponent.vue'
+import AudioPlayer from 'components/AudioPlayer.vue'
+import { defineComponent, ref } from 'vue'
 
-export default Vue.extend({
+export default defineComponent({
   name: 'PageIndex',
-  components: { ExampleComponent },
-  data() {
-    const todos: Todo[] = [
+
+  components: {
+    ExampleComponent,
+    AudioPlayer
+  },
+
+  setup() {
+    const todos = ref<Todo[]>([
       {
         id: 1,
         content: 'ct1'
@@ -40,11 +39,11 @@ export default Vue.extend({
         id: 5,
         content: 'ct5'
       }
-    ]
-    const meta: Meta = {
+    ]);
+    const meta = ref<Meta>({
       totalCount: 1200
-    }
+    })
     return { todos, meta }
   }
-})
+});
 </script>

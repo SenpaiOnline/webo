@@ -13,8 +13,14 @@
 
 import App from 'app/src/App.vue'
 
-let appOptions = App.options /* Vue.extend() */ || App
-let appPrefetch = typeof appOptions.preFetch === 'function'
+let appPrefetch = typeof App.preFetch === 'function'
+  ? App.preFetch
+  : (
+    // Class components return the component options (and the preFetch hook) inside __c property
+    App.__c !== void 0 && typeof App.__c.preFetch === 'function'
+      ? App.__c.preFetch
+      : false
+  )
 
 
 function getMatchedComponents (to, router) {
@@ -29,19 +35,20 @@ function getMatchedComponents (to, router) {
       const comp = m.components[key]
       return {
         path: m.path,
-        c: comp.options /* Vue.extend() */ || comp
+        c: comp
       }
     })
   }))
 }
 
-export function addPreFetchHooks (router, store) {
+export function addPreFetchHooks(router, publicPath) {
   // Add router hook for handling preFetch.
   // Doing it after initial route is resolved so that we don't double-fetch
   // the data that we already have. Using router.beforeResolve() so that all
   // async components are resolved.
   router.beforeResolve((to, from, next) => {
     const
+      urlPath = window.location.href.replace(window.location.origin, ''),
       matched = getMatchedComponents(to, router),
       prevMatched = getMatchedComponents(from, router)
 
@@ -54,15 +61,19 @@ export function addPreFetchHooks (router, store) {
           m.path.indexOf('/:') > -1 // does it has params?
         ))
       })
-      .filter(m => m.c && typeof m.c.preFetch === 'function')
-      .map(m => m.c.preFetch)
+      .filter(m => m.c !== void 0 && (
+        typeof m.c.preFetch === 'function'
+        // Class components return the component options (and the preFetch hook) inside __c property
+        || (m.c.__c !== void 0 && typeof m.c.__c.preFetch === 'function')
+      ))
+      .map(m => m.c.__c !== void 0 ? m.c.__c.preFetch : m.c.preFetch)
 
-    
-    if (appPrefetch === true) {
+
+    if (appPrefetch !== false) {
+      preFetchList.unshift(appPrefetch)
       appPrefetch = false
-      preFetchList.unshift(appOptions.preFetch)
     }
-    
+
 
     if (preFetchList.length === 0) {
       return next()
@@ -74,18 +85,19 @@ export function addPreFetchHooks (router, store) {
       next(url)
     }
     const proceed = () => {
-      
+
       if (hasRedirected === false) { next() }
     }
 
-    
 
     preFetchList.reduce(
       (promise, preFetch) => promise.then(() => hasRedirected === false && preFetch({
-        store,
+
         currentRoute: to,
         previousRoute: from,
-        redirect
+        redirect,
+        urlPath,
+        publicPath
       })),
       Promise.resolve()
     )

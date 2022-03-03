@@ -11,6 +11,9 @@
  **/
 
 
+import {createApp} from 'vue'
+
+
 import '@quasar/extras/roboto-font/roboto-font.css'
 
 import '@quasar/extras/material-icons/material-icons.css'
@@ -20,70 +23,67 @@ import '@quasar/extras/material-icons/material-icons.css'
 import 'quasar/dist/quasar.sass'
 
 
-import 'src/css/app.sass'
-
-import '@quasar/quasar-ui-qmediaplayer/src/index.sass'
+import 'src/css/app.scss'
 
 
-import Vue from 'vue'
-import createApp from './app.js'
-
-
-import qboot_Bootcompositionapi from 'boot/composition-api'
-
-import qboot_Booti18n from 'boot/i18n'
-
-import qboot_Bootaxios from 'boot/axios'
-
-import qboot_Quasarquasarappextensionqmediaplayersrcbootregisterjs
-  from '@quasar/quasar-app-extension-qmediaplayer/src/boot/register.js'
-
-
-Vue.config.devtools = true
-Vue.config.productionTip = false
-
+import createQuasarApp from './app.js'
+import quasarUserOptions from './quasar-user-options.js'
 
 
 console.info('[Quasar] Running SPA.')
 
 
+const publicPath = `/`
 
 
+async function start({app, router}, bootFiles) {
 
-async function start () {
-  const { app, store, router } = await createApp()
 
-  
+  let hasRedirected = false
+  const getRedirectUrl = url => {
+    try {
+      return router.resolve(url).href
+    } catch (err) {
+    }
 
-  
-  let routeUnchanged = true
+    return Object(url) === url
+      ? null
+      : url
+  }
   const redirect = url => {
-    routeUnchanged = false
-    window.location.href = url
+    hasRedirected = true
+
+    if (typeof url === 'string' && /^https?:\/\//.test(url)) {
+      window.location.href = url
+      return
+    }
+
+    const href = getRedirectUrl(url)
+
+    // continue if we didn't fail to resolve the url
+    if (href !== null) {
+      window.location.href = href
+
+    }
   }
 
   const urlPath = window.location.href.replace(window.location.origin, '')
-  const bootFiles = [qboot_Bootcompositionapi,qboot_Booti18n,qboot_Bootaxios,qboot_Quasarquasarappextensionqmediaplayersrcbootregisterjs]
 
-  for (let i = 0; routeUnchanged === true && i < bootFiles.length; i++) {
-    if (typeof bootFiles[i] !== 'function') {
-      continue
-    }
-
+  for (let i = 0; hasRedirected === false && i < bootFiles.length; i++) {
     try {
       await bootFiles[i]({
         app,
         router,
-        store,
-        Vue,
+
         ssrContext: null,
         redirect,
-        urlPath
+        urlPath,
+        publicPath
       })
     }
     catch (err) {
       if (err && err.url) {
-        window.location.href = err.url
+        redirect(err.url)
         return
       }
 
@@ -92,27 +92,32 @@ async function start () {
     }
   }
 
-  if (routeUnchanged === false) {
+  if (hasRedirected === true) {
     return
   }
-  
 
-  
 
-    
+  app.use(router)
 
-    
 
-    
-      new Vue(app)
-    
+  app.mount('#q-app')
 
-    
-
-    
-
-  
 
 }
 
-start()
+createQuasarApp(createApp, quasarUserOptions)
+
+  .then(app => {
+    return Promise.all([
+
+      import(/* webpackMode: "eager" */ 'boot/pinia')
+
+    ]).then(bootFiles => {
+      const boot = bootFiles
+        .map(entry => entry.default)
+        .filter(entry => typeof entry === 'function')
+
+      start(app, boot)
+    })
+  })
+
