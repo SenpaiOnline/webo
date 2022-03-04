@@ -1,10 +1,10 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.6.0"
-    id("org.jetbrains.kotlin.kapt") version "1.6.0"
-    id("com.github.johnrengelman.shadow") version "7.1.0"
-    id("me.qoomon.git-versioning") version "5.1.1"
-    id("io.micronaut.application") version "3.0.0"
-    id("org.jetbrains.kotlin.plugin.allopen") version "1.6.0"
+    id("org.jetbrains.kotlin.jvm") version "1.6.10"
+    id("org.jetbrains.kotlin.kapt") version "1.6.10"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("me.qoomon.git-versioning") version "5.1.5"
+    id("io.micronaut.application") version "3.2.2"
+    id("org.jetbrains.kotlin.plugin.allopen") version "1.6.10"
 }
 
 repositories {
@@ -12,7 +12,7 @@ repositories {
 }
 
 micronaut {
-    version("3.2.0")
+    version("3.3.4")
     runtime("netty")
     testRuntime("kotest")
     processing {
@@ -48,8 +48,8 @@ dependencies {
     implementation("io.swagger.core.v3:swagger-annotations")
     implementation("javax.annotation:javax.annotation-api")
     implementation("io.micronaut:micronaut-validation")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.31")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.31")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.mapstruct:mapstruct:1.4.2.Final")
     compileOnly("javax.inject:javax.inject:1")
     compileOnly("jakarta.persistence:jakarta.persistence-api:2.2.2")
