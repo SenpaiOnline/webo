@@ -12,14 +12,12 @@ import reactor.core.publisher.Mono
 import reactor.util.context.Context
 import reactor.util.context.ContextView
 
-private const val ROWS_PER_PAGE: Long = 20
-
 @Singleton
 class EvolveServiceImpl @Inject constructor(
     private val repository: EvolveDialoguesRepository,
     private val mapper: EvolveDialogueMapper
 ) : EvolveService {
-    override fun characterMeta(character: EvolveCharacter): Mono<EvolveDialoguesMetaDto> =
+    override fun characterMeta(character: EvolveCharacter, rowsPerPage: Long): Mono<EvolveDialoguesMetaDto> =
         Mono.just(character)
             .flatMap { char: EvolveCharacter ->
                 Mono.deferContextual { ctx: ContextView ->
@@ -33,7 +31,7 @@ class EvolveServiceImpl @Inject constructor(
                         }
                 }
             }
-            .contextWrite { ctx: Context -> ctx.put("rowsPerPage", ROWS_PER_PAGE) }
+            .contextWrite { ctx: Context -> ctx.put("rowsPerPage", rowsPerPage) }
 
     override fun findTwentyDialoguesByCharacter(character: EvolveCharacter, offset: Long): Flux<EvolveDialogueDto> =
         repository.findByCharacter(character, offset).map(mapper::entityToDto)
