@@ -45,7 +45,7 @@ export const useEvolveDialoguesStore = defineStore('evolveDialoguesStore', () =>
   const _hasData = computed(() => _tableData.value.length > 0)
 
   async function initialize(character: EvolveCharacter) {
-    const metaDto: EvolveDialoguesMetaDto = await api.characterMeta({ character })
+    const metaDto: EvolveDialoguesMetaDto = await api.countDialoguesByCharacter({ character })
     _pagination.rowsNumber = metaDto.rowsNumber
     _pagination.rowsPerPage = metaDto.rowsPerPage
     _character.value = character

@@ -16,13 +16,17 @@
 import * as runtime from '../runtime'
 import {
   EvolveCharacter,
+  EvolveCharacterFromJSON,
+  EvolveCharacterToJSON,
   EvolveDialogueDto,
   EvolveDialogueDtoFromJSON,
+  EvolveDialogueDtoToJSON,
   EvolveDialoguesMetaDto,
   EvolveDialoguesMetaDtoFromJSON,
+  EvolveDialoguesMetaDtoToJSON,
 } from '../models'
 
-export interface CharacterMetaRequest {
+export interface CountDialoguesByCharacterRequest {
   character: EvolveCharacter;
 }
 
@@ -38,9 +42,9 @@ export class DefaultApi extends runtime.BaseAPI {
 
   /**
    */
-  async characterMetaRaw(requestParameters: CharacterMetaRequest): Promise<runtime.ApiResponse<EvolveDialoguesMetaDto>> {
+  async countDialoguesByCharacterRaw(requestParameters: CountDialoguesByCharacterRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<EvolveDialoguesMetaDto>> {
     if (requestParameters.character === null || requestParameters.character === undefined) {
-      throw new runtime.RequiredError('character', 'Required parameter requestParameters.character was null or undefined when calling characterMeta.')
+      throw new runtime.RequiredError('character', 'Required parameter requestParameters.character was null or undefined when calling countDialoguesByCharacter.')
     }
 
     const queryParameters: any = {}
@@ -48,25 +52,25 @@ export class DefaultApi extends runtime.BaseAPI {
     const headerParameters: runtime.HTTPHeaders = {}
 
     const response = await this.request({
-      path: `/api/evolve/meta/dialogues/{character}`.replace(`{${'character'}}`, encodeURIComponent(String(requestParameters.character))),
+      path: `/api/evolve/meta/dialogues/total/{character}`.replace(`{${'character'}}`, encodeURIComponent(String(requestParameters.character))),
       method: 'GET',
       headers: headerParameters,
       query: queryParameters,
-    })
+    }, initOverrides)
 
     return new runtime.JSONApiResponse(response, (jsonValue) => EvolveDialoguesMetaDtoFromJSON(jsonValue))
   }
 
   /**
    */
-  async characterMeta(requestParameters: CharacterMetaRequest): Promise<EvolveDialoguesMetaDto> {
-    const response = await this.characterMetaRaw(requestParameters)
+  async countDialoguesByCharacter(requestParameters: CountDialoguesByCharacterRequest, initOverrides?: RequestInit): Promise<EvolveDialoguesMetaDto> {
+    const response = await this.countDialoguesByCharacterRaw(requestParameters, initOverrides)
     return await response.value()
   }
 
   /**
    */
-  async findTwentyDialoguesByCharacterRaw(requestParameters: FindTwentyDialoguesByCharacterRequest): Promise<runtime.ApiResponse<Array<EvolveDialogueDto>>> {
+  async findTwentyDialoguesByCharacterRaw(requestParameters: FindTwentyDialoguesByCharacterRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<Array<EvolveDialogueDto>>> {
     if (requestParameters.character === null || requestParameters.character === undefined) {
       throw new runtime.RequiredError('character', 'Required parameter requestParameters.character was null or undefined when calling findTwentyDialoguesByCharacter.')
     }
@@ -88,15 +92,15 @@ export class DefaultApi extends runtime.BaseAPI {
       method: 'GET',
       headers: headerParameters,
       query: queryParameters,
-    })
+    }, initOverrides)
 
     return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(EvolveDialogueDtoFromJSON))
   }
 
   /**
    */
-  async findTwentyDialoguesByCharacter(requestParameters: FindTwentyDialoguesByCharacterRequest): Promise<Array<EvolveDialogueDto>> {
-    const response = await this.findTwentyDialoguesByCharacterRaw(requestParameters)
+  async findTwentyDialoguesByCharacter(requestParameters: FindTwentyDialoguesByCharacterRequest, initOverrides?: RequestInit): Promise<Array<EvolveDialogueDto>> {
+    const response = await this.findTwentyDialoguesByCharacterRaw(requestParameters, initOverrides)
     return await response.value()
   }
 

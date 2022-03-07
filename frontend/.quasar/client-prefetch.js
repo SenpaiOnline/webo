@@ -12,7 +12,6 @@
 
 
 import App from 'app/src/App.vue'
-
 let appPrefetch = typeof App.preFetch === 'function'
   ? App.preFetch
   : (

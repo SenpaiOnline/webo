@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists } from '../runtime'
+import { exists, mapValues } from '../runtime'
 
 /**
  *
@@ -70,5 +70,4 @@ export function EvolveDialogueDtoToJSON(value?: EvolveDialogueDto | null): any {
     'audio': value.audio,
   }
 }
-
 
