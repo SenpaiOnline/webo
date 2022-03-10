@@ -13,7 +13,6 @@
     "@quasar/extras": "^1.12.5",
     "@vueuse/core": "^7.2.2",
     "autoprefixer": "^10.4.2",
-    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "pinia": "^2.0.3",
     "quasar": "^2.5.5",
