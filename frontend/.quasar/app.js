@@ -10,6 +10,7 @@
  * Boot files are your "main.js"
  **/
 
+// @formatter:off
 
 import {Quasar} from 'quasar'
 import RootComponent from 'app/src/App.vue'

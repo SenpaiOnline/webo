@@ -10,6 +10,7 @@
  * Boot files are your "main.js"
  **/
 
+// @formatter:off
 
 import {createApp} from 'vue'
 
