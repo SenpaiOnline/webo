@@ -1,4 +1,5 @@
 plugins {
+    id("org.jetbrains.kotlin.plugin.jpa") version "1.6.10"
     id("org.jetbrains.kotlin.jvm") version "1.6.10"
     id("org.jetbrains.kotlin.kapt") version "1.6.10"
     id("com.github.johnrengelman.shadow") version "7.1.2"
@@ -76,6 +77,10 @@ kapt {
         arg("mapstruct.defaultComponentModel", "jsr330")
         arg("mapstruct.defaultInjectionStrategy", "constructor")
     }
+}
+
+allOpen {
+    annotation("javax.persistence.Entity")
 }
 
 tasks {
