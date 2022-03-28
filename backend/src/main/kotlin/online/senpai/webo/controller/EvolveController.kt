@@ -7,6 +7,7 @@ import io.micronaut.http.annotation.QueryValue
 import io.micronaut.security.annotation.Secured
 import io.micronaut.security.rules.SecurityRule
 import io.micronaut.validation.Validated
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.inject.Inject
 import online.senpai.webo.dto.evolve.EvolveDialogueDto
 import online.senpai.webo.dto.evolve.EvolveDialoguesMetaDto
@@ -15,6 +16,7 @@ import online.senpai.webo.service.EvolveService
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
+@Tag(name = "evolve")
 @Validated
 @Secured(SecurityRule.IS_ANONYMOUS)
 @Controller("/api/evolve")
