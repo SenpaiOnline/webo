@@ -97,7 +97,10 @@ tasks {
         }
     }
     processResources {
-        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+        duplicatesStrategy = DuplicatesStrategy.WARN
+    }
+    processTestResources {
+        duplicatesStrategy = DuplicatesStrategy.WARN
     }
 }
 
