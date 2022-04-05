@@ -1,40 +1,42 @@
 <template lang='pug'>
 q-page(padding)
-  q-table(
-    v-if='character'
-    :pagination='pagination'
-    :rows='tableData'
-    :columns='tableColumns'
-    :row-key='rowKey'
-    :loading='loading'
-    @request="onRequest",
-    wrap-cells
-    flat
-    :rows-per-page-options='[]'
-  )
-    template(v-slot:loading)
-      q-inner-loading(showing color='primary')
-    template(v-slot:body-cell-audio='props')
-      q-td(:props='props')
-        q-btn(v-for='audio in props.row.audio' icon='play_arrow' @click='loadAndPlay(audio)' padding='xs')
-    template(v-slot:top-right='props')
-      q-pagination(
-        v-model='pagination.page'
-        :max='lastPage'
-        :max-pages='maxPagesAtTime'
-        :to-fn='createPaginationLink'
-        boundary-numbers
+  .row.flex-center
+    .col-auto(v-if='!character')
+      p The description for this page is TBD.
+    .col-sm-12.col-md-8.col-lg-8(v-else)
+      q-table(
+        v-if='character'
+        :pagination='pagination'
+        :rows='tableData'
+        :columns='tableColumns'
+        :row-key='rowKey'
+        :loading='loading'
+        @request="onRequest",
+        wrap-cells
+        flat
+        :rows-per-page-options='[]'
       )
-    template(v-slot:pagination='props')
-      q-pagination(
-        v-model='pagination.page'
-        :max='lastPage'
-        :max-pages='maxPagesAtTime'
-        :to-fn='createPaginationLink'
-        boundary-numbers
-      )
-  .row.items-center.justify-center(v-else)
-    p I'm the main page of that layout!
+        template(v-slot:loading)
+          q-inner-loading(showing color='primary')
+        template(v-slot:body-cell-audio='props')
+          q-td(:props='props')
+            q-btn(v-for='audio in props.row.audio' icon='play_arrow' @click='loadAndPlay(audio)' padding='xs')
+        template(v-slot:top-right='props')
+          q-pagination(
+            v-model='pagination.page'
+            :max='lastPage'
+            :max-pages='maxPagesAtTime'
+            :to-fn='createPaginationLink'
+            boundary-numbers
+          )
+        template(v-slot:pagination='props')
+          q-pagination(
+            v-model='pagination.page'
+            :max='lastPage'
+            :max-pages='maxPagesAtTime'
+            :to-fn='createPaginationLink'
+            boundary-numbers
+          )
 </template>
 
 <script lang='ts'>
@@ -131,8 +133,8 @@ export default defineComponent({
       next()
     })
 
-    const onRequest = async (page: number) => {
-      await evolveDialoguesStore.fetchData(page)
+    const onRequest = (page: number) => {
+      void evolveDialoguesStore.fetchData(page)
     }
 
     const createPaginationLink = (page: number) => ({

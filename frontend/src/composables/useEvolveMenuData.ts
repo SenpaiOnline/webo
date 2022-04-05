@@ -12,31 +12,31 @@ const spriteSrc = '/evolve/evolve_characters.png'
 export const evolveMenuAssaultsData: ReadonlyArray<EvolveMenuData> = [
   {
     character: 'Aleksey Markov',
-    page: '/evolve/markov',
+    page: 'markov',
     imageSrc: spriteSrc,
     coordinatesOnSprite: [-370, -130]
   },
   {
     character: 'Ida Lennox',
-    page: '/evolve/lennox',
+    page: 'lennox',
     imageSrc: spriteSrc,
     coordinatesOnSprite: [-250, -250]
   },
   {
     character: 'Hyde',
-    page: '/evolve/hyde',
+    page: 'hyde',
     imageSrc: spriteSrc,
     coordinatesOnSprite: [-130, -250]
   },
   {
     character: 'James Parnell',
-    page: '/evolve/parnell',
+    page: 'parnell',
     imageSrc: spriteSrc,
     coordinatesOnSprite: [-370, -250]
   },
   {
     character: 'Torvald Stavig',
-    page: '/evolve/torvald',
+    page: 'torvald',
     imageSrc: spriteSrc,
     coordinatesOnSprite: [-250, -370]
   }
@@ -45,31 +45,31 @@ export const evolveMenuAssaultsData: ReadonlyArray<EvolveMenuData> = [
 export const evolveMenuMedicsData: ReadonlyArray<EvolveMenuData> = [
   {
     character: 'Alex "Slim"',
-    page: '/evolve/slim',
+    page: 'slim',
     imageSrc: spriteSrc,
     coordinatesOnSprite: [-490, -10]
   },
   {
     character: 'Caira Diaz',
-    page: '/evolve/caira',
+    page: 'caira',
     imageSrc: spriteSrc,
     coordinatesOnSprite: [-490, -370]
   },
   {
     character: 'Ðorde “Lazarus” Živkovic',
-    page: '/evolve/lazarus',
+    page: 'lazarus',
     imageSrc: spriteSrc,
     coordinatesOnSprite: [-490, -250]
   },
   {
     character: 'E.M.E.T.',
-    page: '/evolve/emet',
+    page: 'emet',
     imageSrc: spriteSrc,
     coordinatesOnSprite: [-250, -10]
   },
   {
     character: 'Valerie "Val" Wolski',
-    page: '/evolve/val',
+    page: 'val',
     imageSrc: spriteSrc,
     coordinatesOnSprite: [-490, -130]
   }
@@ -78,31 +78,31 @@ export const evolveMenuMedicsData: ReadonlyArray<EvolveMenuData> = [
 export const evolveMenuTrappersData: ReadonlyArray<EvolveMenuData> = [
   {
     character: 'Abraham "Abe" Presley',
-    page: '/evolve/abe',
+    page: 'abe',
     imageSrc: spriteSrc,
     coordinatesOnSprite: [-10, -10]
   },
   {
     character: 'Jack Arthur Lennox',
-    page: '/evolve/scrap',
+    page: 'scrap',
     imageSrc: spriteSrc,
     coordinatesOnSprite: [-130, -370]
   },
   {
     character: 'Griffin Hallsey',
-    page: '/evolve/griffin',
+    page: 'griffin',
     imageSrc: spriteSrc,
     coordinatesOnSprite: [-250, -130]
   },
   {
     character: 'Khovalyg "Crow"',
-    page: '/evolve/crow',
+    page: 'crow',
     imageSrc: spriteSrc,
     coordinatesOnSprite: [-130, -130]
   },
   {
     character: 'Margaret "Maggie" Lumumba',
-    page: '/evolve/maggie',
+    page: 'maggie',
     imageSrc: spriteSrc,
     coordinatesOnSprite: [-370, -10]
   }
@@ -111,31 +111,31 @@ export const evolveMenuTrappersData: ReadonlyArray<EvolveMenuData> = [
 export const evolveMenuSupportsData: ReadonlyArray<EvolveMenuData> = [
   {
     character: 'Bucket',
-    page: '/evolve/bucket',
+    page: 'bucket',
     imageSrc: spriteSrc,
     coordinatesOnSprite: [-130, -10]
   },
   {
     character: 'Henry “Hank” Allen',
-    page: '/evolve/hank',
+    page: 'hank',
     imageSrc: spriteSrc,
     coordinatesOnSprite: [-10, -250]
   },
   {
     character: 'Kala Kapur',
-    page: '/evolve/tech',
+    page: 'tech',
     imageSrc: spriteSrc,
     coordinatesOnSprite: [-370, -370]
   },
   {
     character: 'Sunny Yú',
-    page: '/evolve/sunny',
+    page: 'sunny',
     imageSrc: spriteSrc,
     coordinatesOnSprite: [-10, -370]
   },
   {
     character: 'William Cabot',
-    page: '/evolve/cabot',
+    page: 'cabot',
     imageSrc: spriteSrc,
     coordinatesOnSprite: [-10, -130]
   }
