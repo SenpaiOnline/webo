@@ -1,5 +1,5 @@
 <template lang='pug'>
-q-toolbar.bg-primary.text-white.shadow-2
+q-toolbar.bg-primary.text-white
   q-btn.q-mr-sm(v-show='showLeftDrawerButton' flat round dense icon='menu' @click='toggleLeftDrawer')
   q-separator(dark vertical inset)
   q-space
