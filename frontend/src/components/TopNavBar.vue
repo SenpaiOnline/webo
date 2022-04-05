@@ -4,7 +4,7 @@ q-toolbar.bg-primary.text-white
   q-separator(dark vertical inset)
   q-space
   q-tabs
-    q-route-tab(label='Blog' name='blog' :to='{ name: "blog" }')
+    q-route-tab(label='Index' name='index' :to='{ name: "index" }')
     q-route-tab(label='Evolve' name='evolve' :to='{ name: "evolve" }')
   q-space
 </template>
