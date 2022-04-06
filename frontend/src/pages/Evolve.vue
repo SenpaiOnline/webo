@@ -1,42 +1,41 @@
 <template lang='pug'>
-q-page(padding)
-  .row.flex-center
-    .col-auto(v-if='!character')
-      p The description for this page is TBD.
-    .col-sm-12.col-md-8.col-lg-8(v-else)
-      q-table(
-        v-if='character'
-        :pagination='pagination'
-        :rows='tableData'
-        :columns='tableColumns'
-        :row-key='rowKey'
-        :loading='loading'
-        @request="onRequest",
-        wrap-cells
-        flat
-        :rows-per-page-options='[]'
-      )
-        template(v-slot:loading)
-          q-inner-loading(showing color='primary')
-        template(v-slot:body-cell-audio='props')
-          q-td(:props='props')
-            q-btn(v-for='audio in props.row.audio' icon='play_arrow' @click='loadAndPlay(audio)' padding='xs')
-        template(v-slot:top-right='props')
-          q-pagination(
-            v-model='pagination.page'
-            :max='lastPage'
-            :max-pages='maxPagesAtTime'
-            :to-fn='createPaginationLink'
-            boundary-numbers
-          )
-        template(v-slot:pagination='props')
-          q-pagination(
-            v-model='pagination.page'
-            :max='lastPage'
-            :max-pages='maxPagesAtTime'
-            :to-fn='createPaginationLink'
-            boundary-numbers
-          )
+q-page(padding).row.justify-center
+  .flex.flex-center(v-if='!character')
+    p The description for this page has yet to be made.
+  .col-sm-12.col-md-8.col-lg-8(v-else)
+    q-table(
+      v-if='character'
+      :pagination='pagination'
+      :rows='tableData'
+      :columns='tableColumns'
+      :row-key='rowKey'
+      :loading='loading'
+      @request="onRequest"
+      wrap-cells
+      flat
+      :rows-per-page-options='[]'
+    )
+      template(v-slot:loading)
+        q-inner-loading(showing color='primary')
+      template(v-slot:body-cell-audio='props')
+        q-td(:props='props')
+          q-btn(v-for='audio in props.row.audio' icon='play_arrow' @click='loadAndPlay(audio)' padding='xs')
+      template(v-slot:top-right='props')
+        q-pagination(
+          v-model='pagination.page'
+          :max='lastPage'
+          :max-pages='maxPagesAtTime'
+          :to-fn='createPaginationLink'
+          boundary-numbers
+        )
+      template(v-slot:pagination='props')
+        q-pagination(
+          v-model='pagination.page'
+          :max='lastPage'
+          :max-pages='maxPagesAtTime'
+          :to-fn='createPaginationLink'
+          boundary-numbers
+        )
 </template>
 
 <script lang='ts'>
