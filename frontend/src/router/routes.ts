@@ -2,10 +2,11 @@ import { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 
 const layoutMainLayout = () => import('layouts/MainLayout.vue')
 
-const pageIndex = () => import('pages/Index.vue')
+const pageIndex = () => import(/* webpackChunkName: 'blog' */'pages/Index.vue')
+const pageBlog = () => import(/* webpackChunkName: 'blog' */'pages/Blog.vue')
 const pageEvolve = () => import(/* webpackChunkName: 'evolve' */ 'pages/Evolve.vue')
 
-const componentBlogLeftDrawer = () => import('components/blog/BlogLeftDrawer.vue')
+const componentBlogLeftDrawer = () => import(/* webpackChunkName: 'blog' */'components/blog/BlogLeftDrawer.vue')
 const componentEvolveLeftDrawer = () => import(/* webpackChunkName: 'evolve' */ 'components/evolve/EvolveLeftDrawer.vue')
 const componentAudioPlayer = () => import('components/AudioPlayer.vue')
 
@@ -22,17 +23,19 @@ const routes: RouteRecordRaw[] = [
           default: pageIndex,
           leftDrawer: componentBlogLeftDrawer
         },
-        children: [
-          {
-            path: 'blog/:id',
-            name: 'blog',
-            components: {
-              default: pageIndex,
-              leftDrawer: componentBlogLeftDrawer
-            },
-            props: true
-          }
-        ]
+      },
+      {
+        path: 'blog/:id',
+        name: 'blog',
+        components: {
+          default: pageBlog,
+          leftDrawer: componentBlogLeftDrawer
+        },
+        props: {
+          default: (route: RouteLocationNormalized) => ({
+            id: Number.parseInt(route.params.id as string, 10)
+          })
+        }
       },
       {
         path: 'evolve/:character?/:page?',
