@@ -1,5 +1,5 @@
 <template lang='pug'>
-q-item(clickable v-ripple :to='to' :inset-level='insetLevel')
+q-item(clickable :to='to' :inset-level='insetLevel')
   q-item-section(avatar)
     q-avatar(rounded size='100px' :style='imageStyle')
   q-item-section
@@ -7,7 +7,8 @@ q-item(clickable v-ripple :to='to' :inset-level='insetLevel')
 </template>
 
 <script lang='ts'>
-import { defineComponent } from 'vue'
+import { defineComponent, PropType } from 'vue'
+import { RouteLocationRaw } from 'vue-router'
 
 export default defineComponent({
   name: 'EvolveMenuItem',
@@ -19,7 +20,7 @@ export default defineComponent({
     },
     imageStyle: String,
     to: {
-      type: String,
+      type: Object as PropType<RouteLocationRaw>,
       required: true
     },
     characterName: {

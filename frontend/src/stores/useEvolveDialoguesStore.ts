@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
-import { Configuration, DefaultApi, EvolveCharacter, EvolveDialogueDto, EvolveDialoguesMetaDto } from 'src/openapi'
+import { EvolveCharacter, EvolveDialogueDto, EvolveDialoguesMetaDto, Configuration, EvolveApi } from 'src/openapi'
 import { computed, reactive, readonly, ref, Ref } from 'vue'
 
-const api = new DefaultApi(new Configuration({ basePath: window.location.origin }))
+const api = new EvolveApi(new Configuration({ basePath: window.location.origin }))
 
 export const useEvolveDialoguesStore = defineStore('evolveDialoguesStore', () => {
   const _pagination = reactive({

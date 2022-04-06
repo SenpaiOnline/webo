@@ -2,11 +2,12 @@ import { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 
 const layoutMainLayout = () => import('layouts/MainLayout.vue')
 
-const pageIndex = () => import('pages/Index.vue')
-const pageEvolveData = () => import(/* webpackChunkName: 'evolve' */ 'pages/EvolveData.vue')
+const pageIndex = () => import(/* webpackChunkName: 'blog' */'pages/Index.vue')
+const pageBlog = () => import(/* webpackChunkName: 'blog' */'pages/Blog.vue')
+const pageEvolve = () => import(/* webpackChunkName: 'evolve' */ 'pages/Evolve.vue')
 
-const componentMainPageLeftDrawer = () => import('components/MainPageLeftDrawer.vue')
-const componentEvolveLeftDrawer = () => import(/* webpackChunkName: 'evolve' */ 'components/EvolveLeftDrawer.vue')
+const componentBlogLeftDrawer = () => import(/* webpackChunkName: 'blog' */'components/blog/BlogLeftDrawer.vue')
+const componentEvolveLeftDrawer = () => import(/* webpackChunkName: 'evolve' */ 'components/evolve/EvolveLeftDrawer.vue')
 const componentAudioPlayer = () => import('components/AudioPlayer.vue')
 
 const routes: RouteRecordRaw[] = [
@@ -20,14 +21,27 @@ const routes: RouteRecordRaw[] = [
         name: 'index',
         components: {
           default: pageIndex,
-          leftDrawer: componentMainPageLeftDrawer
+          leftDrawer: componentBlogLeftDrawer
+        },
+      },
+      {
+        path: 'blog/:id',
+        name: 'blog',
+        components: {
+          default: pageBlog,
+          leftDrawer: componentBlogLeftDrawer
+        },
+        props: {
+          default: (route: RouteLocationNormalized) => ({
+            id: Number.parseInt(route.params.id as string, 10)
+          })
         }
       },
       {
         path: 'evolve/:character?/:page?',
         name: 'evolve',
         components: {
-          default: pageEvolveData,
+          default: pageEvolve,
           leftDrawer: componentEvolveLeftDrawer,
           footer: componentAudioPlayer
         },
@@ -42,7 +56,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/Error404.vue'),
+    component: () => import('pages/ErrorNotFound.vue'),
   },
 ]
 

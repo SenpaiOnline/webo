@@ -15,12 +15,6 @@
 
 import * as runtime from '../runtime'
 import {
-  BlogPostDto,
-  BlogPostDtoFromJSON,
-  BlogPostDtoToJSON,
-  BlogPostPreviewDto,
-  BlogPostPreviewDtoFromJSON,
-  BlogPostPreviewDtoToJSON,
   EvolveCharacter,
   EvolveCharacterFromJSON,
   EvolveCharacterToJSON,
@@ -36,10 +30,6 @@ export interface CountDialoguesByCharacterRequest {
   character: EvolveCharacter;
 }
 
-export interface FindPostRequest {
-  id: number;
-}
-
 export interface FindTwentyDialoguesByCharacterRequest {
   character: EvolveCharacter;
   offset: number;
@@ -48,7 +38,7 @@ export interface FindTwentyDialoguesByCharacterRequest {
 /**
  *
  */
-export class DefaultApi extends runtime.BaseAPI {
+export class EvolveApi extends runtime.BaseAPI {
 
   /**
    */
@@ -75,58 +65,6 @@ export class DefaultApi extends runtime.BaseAPI {
    */
   async countDialoguesByCharacter(requestParameters: CountDialoguesByCharacterRequest, initOverrides?: RequestInit): Promise<EvolveDialoguesMetaDto> {
     const response = await this.countDialoguesByCharacterRaw(requestParameters, initOverrides)
-    return await response.value()
-  }
-
-  /**
-   */
-  async findPostRaw(requestParameters: FindPostRequest, initOverrides?: RequestInit): Promise<runtime.ApiResponse<BlogPostDto>> {
-    if (requestParameters.id === null || requestParameters.id === undefined) {
-      throw new runtime.RequiredError('id', 'Required parameter requestParameters.id was null or undefined when calling findPost.')
-    }
-
-    const queryParameters: any = {}
-
-    const headerParameters: runtime.HTTPHeaders = {}
-
-    const response = await this.request({
-      path: `/api/blog/post/{id}`.replace(`{${'id'}}`, encodeURIComponent(String(requestParameters.id))),
-      method: 'GET',
-      headers: headerParameters,
-      query: queryParameters,
-    }, initOverrides)
-
-    return new runtime.JSONApiResponse(response, (jsonValue) => BlogPostDtoFromJSON(jsonValue))
-  }
-
-  /**
-   */
-  async findPost(requestParameters: FindPostRequest, initOverrides?: RequestInit): Promise<BlogPostDto> {
-    const response = await this.findPostRaw(requestParameters, initOverrides)
-    return await response.value()
-  }
-
-  /**
-   */
-  async findPublishedPostsIdsRaw(initOverrides?: RequestInit): Promise<runtime.ApiResponse<Array<BlogPostPreviewDto>>> {
-    const queryParameters: any = {}
-
-    const headerParameters: runtime.HTTPHeaders = {}
-
-    const response = await this.request({
-      path: `/api/blog/posts`,
-      method: 'GET',
-      headers: headerParameters,
-      query: queryParameters,
-    }, initOverrides)
-
-    return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(BlogPostPreviewDtoFromJSON))
-  }
-
-  /**
-   */
-  async findPublishedPostsIds(initOverrides?: RequestInit): Promise<Array<BlogPostPreviewDto>> {
-    const response = await this.findPublishedPostsIdsRaw(initOverrides)
     return await response.value()
   }
 
