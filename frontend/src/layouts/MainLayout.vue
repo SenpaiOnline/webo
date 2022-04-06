@@ -4,9 +4,10 @@ q-layout(view='hHh lpr fFf')
     top-nav-bar(:show-left-drawer-button='showLeftDrawerButton' :show-right-drawer-button='showRightDrawerButton')
   q-footer(elevated)
     router-view(name='footer')
-  q-drawer(v-model='leftDrawerOpen' :breakpoint=700 bordered side='left' overlay)
+  // TODO #WEBO-25
+  q-drawer(:model-value='leftDrawerOpen' bordered side='left' overlay persistent)
     router-view(name='leftDrawer' ref='leftDrawer')
-  q-drawer(v-model='rightDrawerOpen' :breakpoint=700 bordered side='right' overlay)
+  q-drawer(:model-value='rightDrawerOpen' bordered side='right' overlay)
     router-view(name='rightDrawer' ref='rightDrawer')
   q-page-container
     router-view
